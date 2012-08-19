@@ -2,6 +2,9 @@
 
 A simple slider for html data lists (&lt;dl>)
 
+> **Mhh... why I believe this slider is indispensable?**<br/>
+> *Well, it doesn't touch your markup, and it's based on the scrolling position of the &lt;dl>-element.*
+
 ## Usage
 
 ### Markup
