@@ -1,4 +1,4 @@
 dlsldr
 ======
 
-An simple slider for html data lists (&lt;dl>)
+A simple slider for html data lists (&lt;dl>)
