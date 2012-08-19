@@ -1,0 +1,3 @@
+renamed "delay" to "duration"
+removed some obsolete comments
+changed animation internals, so the titles doesn't twitch anymore in some browsers (i.e. IE - sweet polysem ^^)
