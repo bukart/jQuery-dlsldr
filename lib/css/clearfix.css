@@ -1,0 +1,3 @@
+.cfx:after { content : "."; display : block; height : 0px; clear : both; visibility : hidden; overflow : hidden; }
+* + html .cfx { display : inline-block; }
+* html .cfx { height : 1%; }

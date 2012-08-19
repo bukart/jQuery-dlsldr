@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+
+        <script src="../lib/js/jquery/jquery-1.8.0.min.js" type="text/javascript"></script>
+        <script src="../js/dlsldr-0.0.1.js" type="text/javascript"></script>
+
+        <style>
+
+            html
+            {
+                font-size           : 62.5%;
+            }
+
+            body
+            {
+                font-family         : 'Times New Roman';
+                font-size           : 16px;
+                font-size           : 1.6rem;
+                line-height         : 1.25;
+                background          : #888;
+            }
+
+            dl
+            {
+                width               : 600px;
+                margin              : 50px auto;
+                color               : #000;
+                background          : #aaa;
+            }
+
+            dl dt
+            {
+                font-size           : 20px;
+                font-size           : 2rem;
+                font-weight         : bold;
+                cursor              : pointer;
+                text-decoration     : underline;
+                padding             : 10px;
+            }
+
+            dl dd
+            {
+                padding             : 10px;
+                margin-left         : 0px;
+                background          : #fff;
+                overflow            : auto;
+            }
+
+            p
+            {
+                text-align          : justify;
+            }
+
+
+            dl dt
+            {
+                color               : #666;
+            }
+
+            dl dt.dlsldr-active
+            {
+                color               : #000;
+            }
+
+            dl.hscroll {
+                overflow-x          : auto !important;
+            }
+
+            a
+            {
+                color               : #00a;
+                text-decoration     : none;
+            }
+
+            a:hover
+            {
+                color               : #a00;
+                text-decoration     : underline;
+            }
+
+        </style>
+    </head>
+    <body>
+
+
+        <dl class="dlsldr">
+            <dt>
+                Lorem ipsum dolor
+            </dt>
+            <dd>
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+
+                <p>Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.</p>
+
+                <p>Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus.</p>
+
+                <p>Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus.</p>
+
+                <p>Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,</p>
+            </dd>
+
+            <dt>
+                Lorem ipsum auf Deutsch
+            </dt>
+            <dd>
+                <p>Auch gibt es niemanden, der den Schmerz an sich liebt, sucht oder wünscht, nur, weil er Schmerz ist, es sei denn, es kommt zu zufälligen Umständen, in denen Mühen und Schmerz ihm große Freude bereiten können.</p>
+
+                <p>Um ein triviales Beispiel zu nehmen, wer von uns unterzieht sich je anstrengender körperlicher Betätigung, außer um Vorteile daraus zu ziehen?</p>
+
+                <p>Aber wer hat irgend ein Recht, einen Menschen zu tadeln, der die Entscheidung trifft, eine Freude zu genießen, die keine unangenehmen Folgen hat, oder einen, der Schmerz vermeidet, welcher keine daraus resultierende Freude nach sich zieht?</p>
+
+                <p>Auch gibt es niemanden, der den Schmerz an sich liebt, sucht oder wünscht, nur, weil er Schmerz ist, es sei denn, es kommt zu zufälligen Umständen, in denen Mühen und Schmerz ihm große Freude bereiten können.</p>
+
+                <p>Um ein triviales Beispiel zu nehmen, wer von uns unterzieht sich je anstrengender körperlicher Betätigung, außer um Vorteile daraus zu ziehen? Aber wer hat irgend ein Recht, einen Menschen zu tadeln, der die Entscheidung trifft, eine Freude zu genießen, die keine unangenehmen Folgen hat, oder einen, der Schmerz vermeidet, welcher keine daraus resultierende Freude nach sich zieht? Auch gibt es niemanden, der den Schmerz an sich liebt, sucht oder wünscht, nur,</p>
+            </dd>
+
+            <dt>
+                dlsldr_v0.0.1
+            </dt>
+            <dd>
+
+                <p>
+                    <a href="http://opensource.org/" target="_blank" title="opensource.org">
+                        <img src="../lib/img/opensource/os-logo-200px.png" align="right" alt="open source" border="0"/>
+                    </a>
+                    Click on the titles above or move them horizontally.
+                </p>
+
+                <p>Goto an specific item:</p>
+                <ol>
+                    <li>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 0 )">Lorem ipsum dolor</a>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 0, true )">(animated)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 1 )">Lorem ipsum auf Deutsch</a>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 1, true )">(animated)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 2 )">dlsldr v0.0.1</a>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 2, true )">(animated)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 3 )">Li Europan lingues</a>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 3, true )">(animated)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 4 )">Hinter den Wortbergen</a>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 4, true )">(animated)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 5 )">Ich bin Blindtext</a>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 5, true )">(animated)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 6 )">Werther</a>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 6, true )">(animated)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 7 )">Kafka</a>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 7, true )">(animated)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 8 )">Trapattoni '98</a>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 8, true )">(animated)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 9 )">Er hörte leise</a>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 9, true )">(animated)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 10 )">Typoblindtext</a>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 10, true )">(animated)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 11 )">Webstandards</a>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 11, true )">(animated)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 12 )">Pangramm</a>
+                        <a href="#" onclick="jQuery( this ).parents( 'dd' ).dlsldr( 'goTo', 12, true )">(animated)</a>
+                    </li>
+                </ol>
+
+                <p><a href="#" onclick="jQuery( this ).parents( 'dl' ).toggleClass( 'hscroll' );">toggle native horizontal scrolling</a></p>
+
+                <p>The markup for such an slider is just only<br/>
+                    <tt>
+                        &lt;dl&gt;<br/>
+                        &nbsp; &nbsp; &lt;dt&gt;title markup&lt;/dt&gt;<br/>
+                        &nbsp; &nbsp; &lt;dd&gt;content markup&lt;/dd&gt;<br/>
+                        &nbsp; &nbsp; &lt;dt&gt;title markup&lt;/dt&gt;<br/>
+                        &nbsp; &nbsp; &lt;dd&gt;content markup&lt;/dd&gt;<br/>
+                        &nbsp; &nbsp; &hellip;<br/>
+                        &lt;/dl&gt;<br/>
+                    </tt>
+
+                <p>The plugin doesn't change anything within the given markup structure aside from some necessary classes and styles.</p>
+
+                <p>Currently there are some sizing bugs in IE7 and miscellaneous bugs with untested options.</p>
+            </dd>
+
+            <dt>
+                Li Europan lingues
+            </dt>
+            <dd>
+                <p>Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular.</p>
+
+                <p>Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores.</p>
+
+                <p>At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles. Ma quande lingues coalesce, li grammatica del resultant lingue es plu simplic e regulari quam ti del coalescent lingues.</p>
+
+                <p>Li nov lingua franca va esser plu simplic e regulari quam li existent Europan lingues. It va esser tam simplic quam Occidental in fact, it va esser Occidental. A un Angleso it va semblar un simplificat Angles, quam un skeptic Cambridge amico dit me que Occidental es.</p>
+
+                <p>Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles.</p>
+            </dd>
+
+            <dt>
+                Hinter den Wortbergen
+            </dt>
+            <dd>
+                <p>Weit hinten, hinter den Wortbergen, fern der Länder Vokalien und Konsonantien leben die Blindtexte. Abgeschieden wohnen Sie in Buchstabhausen an der Küste des Semantik, eines großen Sprachozeans.</p>
+
+                <p>Ein kleines Bächlein namens Duden fließt durch ihren Ort und versorgt sie mit den nötigen Regelialien. Es ist ein paradiesmatisches Land, in dem einem gebratene Satzteile in den Mund fliegen.</p>
+
+                <p>Nicht einmal von der allmächtigen Interpunktion werden die Blindtexte beherrscht – ein geradezu unorthographisches Leben. Eines Tages aber beschloß eine kleine Zeile Blindtext, ihr Name war Lorem Ipsum, hinaus zu gehen in die weite Grammatik.</p>
+
+                <p>Der große Oxmox riet ihr davon ab, da es dort wimmele von bösen Kommata, wilden Fragezeichen und hinterhältigen Semikoli, doch das Blindtextchen ließ sich nicht beirren. Es packte seine sieben Versalien, schob sich sein Initial in den Gürtel und machte sich auf den Weg.</p>
+
+                <p>Als es die ersten Hügel des Kursivgebirges erklommen hatte, warf es einen letzten Blick zurück auf die Skyline seiner Heimatstadt Buchstabhausen, die Headline von Alphabetdorf und die Subline seiner eigenen Straße, der Zeilengasse. Wehmütig lief ihm eine rhetorische Frage über die Wange, dann setzte es seinen Weg fort. Unterwegs traf es eine Copy. Die Copy warnte das Blindtextchen, da, wo sie herkäme wäre sie</p>
+            </dd>
+
+            <dt>
+                Ich bin Blindtext
+            </dt>
+            <dd>
+                <p>Ich bin Blindtext. Von Geburt an. Es hat lange gedauert, bis ich begriffen habe, was es bedeutet, ein blinder Text zu sein: Man macht keinen Sinn. Man wirkt hier und da aus dem Zusammenhang gerissen.</p>
+
+                <p>Oft wird man gar nicht erst gelesen. Aber bin ich deshalb ein schlechter Text? Ich weiß, dass ich nie die Chance haben werde im Stern zu erscheinen. Aber bin ich darum weniger wichtig? Ich bin blind!</p>
+
+                <p>Aber ich bin gerne Text. Und sollten Sie mich jetzt tatsächlich zu Ende lesen, dann habe ich etwas geschafft, was den meisten "normalen" Texten nicht gelingt. Ich bin Blindtext. Von Geburt an.</p>
+
+                <p>Es hat lange gedauert, bis ich begriffen habe, was es bedeutet, ein blinder Text zu sein: Man macht keinen Sinn. Man wirkt hier und da aus dem Zusammenhang gerissen. Oft wird man gar nicht erst gelesen.</p>
+
+                <p>Aber bin ich deshalb ein schlechter Text? Ich weiß, dass ich nie die Chance haben werde im Stern zu erscheinen. Aber bin ich darum weniger wichtig? Ich bin blind! Aber ich bin gerne Text. Und sollten Sie mich jetzt tatsächlich zu Ende lesen, dann habe ich etwas geschafft, was den meisten "normalen" Texten nicht gelingt. Ich bin Blindtext. Von</p>
+            </dd>
+
+            <dt>
+                Werther
+            </dt>
+            <dd>
+                <p>Eine wunderbare Heiterkeit hat meine ganze Seele eingenommen, gleich den süßen Frühlingsmorgen, die ich mit ganzem Herzen genieße. Ich bin allein und freue mich meines Lebens in dieser Gegend, die für solche Seelen geschaffen ist wie die meine.</p>
+
+                <p>Ich bin so glücklich, mein Bester, so ganz in dem Gefühle von ruhigem Dasein versunken, daß meine Kunst darunter leidet. Ich könnte jetzt nicht zeichnen, nicht einen Strich, und bin nie ein größerer Maler gewesen als in diesen Augenblicken.</p>
+
+                <p>Wenn das liebe Tal um mich dampft, und die hohe Sonne an der Oberfläche der undurchdringlichen Finsternis meines Waldes ruht, und nur einzelne Strahlen sich in das innere Heiligtum stehlen, ich dann im hohen Grase am fallenden Bache liege, und näher an der Erde tausend mannigfaltige Gräschen mir merkwürdig werden; wenn ich das Wimmeln der kleinen Welt zwischen Halmen, die unzähligen, unergründlichen Gestalten der Würmchen, der Mückchen näher an meinem Herzen fühle, und fühle die Gegenwart des Allmächtigen, der uns nach seinem Bilde schuf, das Wehen des Alliebenden, der uns in ewiger Wonne schwebend trägt und erhält; mein Freund!</p>
+
+                <p>Wenn's dann um meine Augen dämmert, und die Welt um mich her und der Himmel ganz in meiner Seele ruhn wie die Gestalt einer</p>
+            </dd>
+
+            <dt>
+                Kafka
+            </dt>
+            <dd>
+                <p>Jemand musste Josef K. verleumdet haben, denn ohne dass er etwas Böses getan hätte, wurde er eines Morgens verhaftet. »Wie ein Hund! « sagte er, es war, als sollte die Scham ihn überleben.</p>
+
+                <p>Als Gregor Samsa eines Morgens aus unruhigen Träumen erwachte, fand er sich in seinem Bett zu einem ungeheueren Ungeziefer verwandelt.</p>
+
+                <p>Und es war ihnen wie eine Bestätigung ihrer neuen Träume und guten Absichten, als am Ziele ihrer Fahrt die Tochter als erste sich erhob und ihren jungen Körper dehnte.</p>
+
+                <p>»Es ist ein eigentümlicher Apparat«, sagte der Offizier zu dem Forschungsreisenden und überblickte mit einem gewissermaßen bewundernden Blick den ihm doch wohlbekannten Apparat. Sie hätten noch ins Boot springen können, aber der Reisende hob ein schweres, geknotetes Tau vom Boden, drohte ihnen damit und hielt sie dadurch von dem Sprunge ab.</p>
+
+                <p>In den letzten Jahrzehnten ist das Interesse an Hungerkünstlern sehr zurückgegangen. Aber sie überwanden sich, umdrängten den Käfig und wollten sich gar nicht fortrühren. Jemand musste Josef K. verleumdet haben, denn ohne dass er etwas Böses getan hätte, wurde er eines Morgens verhaftet. »Wie ein Hund! « sagte er, es war, als sollte die Scham ihn überleben. Als Gregor Samsa eines Morgens aus unruhigen Träumen erwachte, fand er sich</p>
+            </dd>
+
+            <dt>
+                Trapattoni '98
+            </dt>
+            <dd>
+                <p>Es gibt im Moment in diese Mannschaft, oh, einige Spieler vergessen ihnen Profi was sie sind. Ich lese nicht sehr viele Zeitungen, aber ich habe gehört viele Situationen. Erstens: wir haben nicht offensiv gespielt.</p>
+
+                <p>Es gibt keine deutsche Mannschaft spielt offensiv und die Name offensiv wie Bayern. Letzte Spiel hatten wir in Platz drei Spitzen: Elber, Jancka und dann Zickler. Wir müssen nicht vergessen Zickler.</p>
+
+                <p>Zickler ist eine Spitzen mehr, Mehmet eh mehr Basler. Ist klar diese Wörter, ist möglich verstehen, was ich hab gesagt? Danke. Offensiv, offensiv ist wie machen wir in Platz.</p>
+
+                <p>Zweitens: ich habe erklärt mit diese zwei Spieler: nach Dortmund brauchen vielleicht Halbzeit Pause. Ich habe auch andere Mannschaften gesehen in Europa nach diese Mittwoch. Ich habe gesehen auch zwei Tage die Training. Ein Trainer ist nicht ein Idiot!</p>
+
+                <p>Ein Trainer sei sehen was passieren in Platz. In diese Spiel es waren zwei, drei diese Spieler waren schwach wie eine Flasche leer! Haben Sie gesehen Mittwoch, welche Mannschaft hat gespielt Mittwoch? Hat gespielt Mehmet oder gespielt Basler oder hat gespielt Trapattoni? Diese Spieler beklagen mehr als sie spielen! Wissen Sie, warum die Italienmannschaften kaufen nicht diese Spieler? Weil wir haben gesehen viele Male solche Spiel! Haben</p>
+            </dd>
+
+            <dt>
+                Er hörte leise
+            </dt>
+            <dd>
+                <p>Er hörte leise Schritte hinter sich. Das bedeutete nichts Gutes. Wer würde ihm schon folgen, spät in der Nacht und dazu noch in dieser engen Gasse mitten im übel beleumundeten Hafenviertel?</p>
+
+                <p>Gerade jetzt, wo er das Ding seines Lebens gedreht hatte und mit der Beute verschwinden wollte! Hatte einer seiner zahllosen Kollegen dieselbe Idee gehabt, ihn beobachtet und abgewartet, um ihn nun um die Früchte seiner Arbeit zu erleichtern?</p>
+
+                <p>Oder gehörten die Schritte hinter ihm zu einem der unzähligen Gesetzeshüter dieser Stadt, und die stählerne Acht um seine Handgelenke würde gleich zuschnappen? Er konnte die Aufforderung stehen zu bleiben schon hören.</p>
+
+                <p>Gehetzt sah er sich um. Plötzlich erblickte er den schmalen Durchgang. Blitzartig drehte er sich nach rechts und verschwand zwischen den beiden Gebäuden. Beinahe wäre er dabei über den umgestürzten Mülleimer gefallen, der mitten im Weg lag.</p>
+
+                <p>Er versuchte, sich in der Dunkelheit seinen Weg zu ertasten und erstarrte: Anscheinend gab es keinen anderen Ausweg aus diesem kleinen Hof als den Durchgang, durch den er gekommen war. Die Schritte wurden lauter und lauter, er sah eine dunkle Gestalt um die Ecke biegen. Fieberhaft irrten seine Augen durch die nächtliche Dunkelheit und suchten einen Ausweg. War jetzt wirklich</p>
+            </dd>
+
+            <dt>
+                Typoblindtext
+            </dt>
+            <dd>
+                <p>Dies ist ein Typoblindtext. An ihm kann man sehen, ob alle Buchstaben da sind und wie sie aussehen. Manchmal benutzt man Worte wie Hamburgefonts, Rafgenduks oder Handgloves, um Schriften zu testen.</p>
+
+                <p>Manchmal Sätze, die alle Buchstaben des Alphabets enthalten - man nennt diese Sätze »Pangrams«. Sehr bekannt ist dieser: The quick brown fox jumps over the lazy old dog.</p>
+
+                <p>Oft werden in Typoblindtexte auch fremdsprachige Satzteile eingebaut (AVAIL® and Wefox™ are testing aussi la Kerning), um die Wirkung in anderen Sprachen zu testen. In Lateinisch sieht zum Beispiel fast jede Schrift gut aus. Quod erat demonstrandum.</p>
+
+                <p>Seit 1975 fehlen in den meisten Testtexten die Zahlen, weswegen nach TypoGb. 204 § ab dem Jahr 2034 Zahlen in 86 der Texte zur Pflicht werden. Nichteinhaltung wird mit bis zu 245 € oder 368 $ bestraft.</p>
+
+                <p>Genauso wichtig in sind mittlerweile auch Âçcèñtë, die in neueren Schriften aber fast immer enthalten sind. Ein wichtiges aber schwierig zu integrierendes Feld sind OpenType-Funktionalitäten. Je nach Software und Voreinstellungen können eingebaute Kapitälchen, Kerning oder Ligaturen (sehr pfiffig) nicht richtig dargestellt werden. Dies ist ein Typoblindtext. An ihm kann man sehen, ob alle Buchstaben da sind und wie sie aussehen. Manchmal benutzt man Worte wie Hamburgefonts, Rafgenduks</p>
+            </dd>
+
+            <dt>
+                Webstandards
+            </dt>
+            <dd>
+                <p>Überall dieselbe alte Leier. Das Layout ist fertig, der Text lässt auf sich warten. Damit das Layout nun nicht nackt im Raume steht und sich klein und leer vorkommt, springe ich ein: der Blindtext.</p>
+
+                <p>Genau zu diesem Zwecke erschaffen, immer im Schatten meines großen Bruders »Lorem Ipsum«, freue ich mich jedes Mal, wenn Sie ein paar Zeilen lesen. Denn esse est percipi - Sein ist wahrgenommen werden.</p>
+
+                <p>Und weil Sie nun schon die Güte haben, mich ein paar weitere Sätze lang zu begleiten, möchte ich diese Gelegenheit nutzen, Ihnen nicht nur als Lückenfüller zu dienen, sondern auf etwas hinzuweisen, das es ebenso verdient wahrgenommen zu werden: Webstandards nämlich.</p>
+
+                <p>Sehen Sie, Webstandards sind das Regelwerk, auf dem Webseiten aufbauen. So gibt es Regeln für HTML, CSS, JavaScript oder auch XML; Worte, die Sie vielleicht schon einmal von Ihrem Entwickler gehört haben.</p>
+
+                <p>Diese Standards sorgen dafür, dass alle Beteiligten aus einer Webseite den größten Nutzen ziehen. Im Gegensatz zu früheren Webseiten müssen wir zum Beispiel nicht mehr zwei verschiedene Webseiten für den Internet Explorer und einen anderen Browser programmieren. Es reicht eine Seite, die - richtig angelegt - sowohl auf verschiedenen Browsern im Netz funktioniert, aber ebenso gut für den Ausdruck oder</p>
+            </dd>
+
+            <dt>
+                Pangramm
+            </dt>
+            <dd>
+                <p>Zwei flinke Boxer jagen die quirlige Eva und ihren Mops durch Sylt. Franz jagt im komplett verwahrlosten Taxi quer durch Bayern. Zwölf Boxkämpfer jagen Viktor quer über den großen Sylter Deich. Vogel Quax zwickt Johnys Pferd Bim.</p>
+
+                <p>Sylvia wagt quick den Jux bei Pforzheim. Polyfon zwitschernd aßen Mäxchens Vögel Rüben, Joghurt und Quark. "Fix, Schwyz! " quäkt Jürgen blöd vom Paß. Victor jagt zwölf Boxkämpfer quer über den großen Sylter Deich.</p>
+
+                <p>Falsches Üben von Xylophonmusik quält jeden größeren Zwerg. Heizölrückstoßabdämpfung. Zwei flinke Boxer jagen die quirlige Eva und ihren Mops durch Sylt. Franz jagt im komplett verwahrlosten Taxi quer durch Bayern.</p>
+
+                <p>Zwölf Boxkämpfer jagen Viktor quer über den großen Sylter Deich. Vogel Quax zwickt Johnys Pferd Bim. Sylvia wagt quick den Jux bei Pforzheim. Polyfon zwitschernd aßen Mäxchens Vögel Rüben, Joghurt und Quark. "Fix, Schwyz!</p>
+
+                <p>" quäkt Jürgen blöd vom Paß. Victor jagt zwölf Boxkämpfer quer über den großen Sylter Deich. Falsches Üben von Xylophonmusik quält jeden größeren Zwerg. Heizölrückstoßabdämpfung. Zwei flinke Boxer jagen die quirlige Eva und ihren Mops durch Sylt. Franz jagt im komplett verwahrlosten Taxi quer durch Bayern. Zwölf Boxkämpfer jagen Viktor quer über den großen Sylter Deich. Vogel Quax zwickt Johnys Pferd Bim. Sylvia wagt quick den Jux</p>
+            </dd>
+        </dl>
+
+
+
+        <script type="text/javascript">
+        // <![CDATA[
+            ;( function( $ )
+            {
+                $( function()
+                {
+                    $( 'dl' ).dlsldr( { 'container' : { 'height' : 500 } } );
+                    $( 'dl' ).dlsldr( 'goTo', 2 );
+                } );
+            } ( jQuery ) );
+        // ]]>
+        </script>
+
+
+    </body>
+</html>
