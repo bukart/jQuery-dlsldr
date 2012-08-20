@@ -5,6 +5,10 @@ A simple slider for html data lists (&lt;dl>)
 > **Mhh... why I believe this slider is indispensable?**<br/>
 > *Well, it doesn't touch your markup, and it's based on the scrolling position of the &lt;dl>-element.*
 
+## Example
+
+Hey, just [visit the github page about this plugin](http://bukart.github.com/jQuery-dlsldr/), to see it in action.
+
 ## Usage
 
 ### Markup
