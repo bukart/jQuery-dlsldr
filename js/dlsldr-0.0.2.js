@@ -1,4 +1,3 @@
-
 /**
  * A simple slider for html data lists (<dl>)
  *
@@ -31,7 +30,8 @@
     function baseplugin()
     {
 
-        var _UNSPC_ = _NSPC_ + ( new Date() ).getTime() + Math.round( ( new Date() ).getTime() * Math.random() );
+        var _UNSPC_ = _NSPC_ + ( new Date() ).getTime()
+                                    + Math.round( ( new Date() ).getTime() * Math.random() );
 
         var self = this;
 
@@ -120,6 +120,10 @@
                                                             // the headers' height
                                                             // 'max' sets all databoxes to the same
                                                             // maximum height
+                'draggable'             : true,             // true: databoxes can be dragged
+                'preventDragEvent'      : true,             // true: calls stopPropagation() and
+                                                            // preventDefault() for the click and
+                                                            // move events while dragging
                 'style'                 : {}                // some styles to be initially applied
                                                             // to each databox
             },
@@ -128,7 +132,8 @@
                 'duration'                 : '',            // the duration of the animated
                                                             // transition
                                                             // allowed values: number >= 0, string
-                                                            // all jQuery durations are possible here
+                                                            // all jQuery durations are possible
+                                                            // here
                 'easing'                : 'swing'           // the easing method to be used with the
                                                             // animation
             }
@@ -187,8 +192,8 @@
         };
 
 
-        // helper object to organize the parts, i.e. the involved DOM objects
-        var parts =
+        // helper object to organize the components, i.e. the involved DOM objects
+        var components =
         {
             '$container'            : null,
             '$headers'              : null,
@@ -209,6 +214,14 @@
                 'initialPos'            : 0,
                 'dragged'               : false
             },
+            'draggingDatabox'       :
+            {
+                'active'                : false,
+                'startEvent'            : null,
+                'initialPos'            : 0,
+                'dragged'               : false,
+                'maxDist'               : 0
+            },
             'activated_setPos'    : false
         };
         // end of status
@@ -226,27 +239,25 @@
 
 
         // ·························································································
-        // > pattern for setting/getting parts data
+        // > pattern for setting/getting components data
 
-        var _parts2settingsName
-            = methods.private.part2settingsName
-            = function( partsName )
+        var _components2settingsName
+            = function( componentsName )
         {
-            var partsNames =
+            var componentsNames =
             {
                 '$container'        : 'container',
                 '$headers'          : 'headers',
                 '$databoxes'        : 'databoxes'
             };
 
-            return partsNames[ partsName ]
-                ? partsNames[ partsName ]
+            return componentsNames[ componentsName ]
+                ? componentsNames[ componentsName ]
                 : false;
         };
 
 
-        var _settings2partsName
-            = methods.private.settings2partsName
+        var _settings2componentsName
             = function( settingsName )
         {
             var settingsNames =
@@ -262,41 +273,37 @@
         };
 
 
-        var _partsNameExists
-            = methods.private.partsNameExists
-            = function( partsName )
+        var _componentsNameExists
+            = function( componentsName )
         {
-            return _parts2settingsName( partsName ) != false;
+            return _components2settingsName( componentsName ) != false;
         };
 
 
         var _settingsNameExists
-            = methods.private.settingsNameExists
             = function( settingsName )
         {
-            return _settings2partsName( settingsName ) != false;
+            return _settings2componentsName( settingsName ) != false;
         };
 
 
-        var _setPartWidth
-            = methods.private.setPartWidth
+        var _setComponentWidth
             = function( settingsName, width )
         {
             if ( _settingsNameExists( settingsName ) )
             {
-                var ow = parts[ _settings2partsName( settingsName ) ].outerWidth();
-                var iw = parts[ _settings2partsName( settingsName ) ].width();
+                var ow = components[ _settings2componentsName( settingsName ) ].outerWidth();
+                var iw = components[ _settings2componentsName( settingsName ) ].width();
                 var dw = ow - iw;
 
-                parts[ _settings2partsName( settingsName ) ].width(
+                components[ _settings2componentsName( settingsName ) ].width(
                     ( settings[ settingsName ]._applied.width = width ) - dw
                 );
             }
         };
 
 
-        var _getPartWidth
-            = methods.private.getPartWidth
+        var _getComponentWidth
             = function( settingsName )
         {
             return _settingsNameExists( settingsName )
@@ -305,25 +312,23 @@
         };
 
 
-        var _setPartHeight
-            = methods.private.setPartHeight
+        var _setComponentHeight
             = function( settingsName, height )
         {
             if ( _settingsNameExists( settingsName ) )
             {
-                var oh = parts[ _settings2partsName( settingsName ) ].outerHeight();
-                var ih = parts[ _settings2partsName( settingsName ) ].height();
+                var oh = components[ _settings2componentsName( settingsName ) ].outerHeight();
+                var ih = components[ _settings2componentsName( settingsName ) ].height();
                 var dh = oh - ih;
 
-                parts[ _settings2partsName( settingsName ) ].height(
+                components[ _settings2componentsName( settingsName ) ].height(
                     ( settings[ settingsName ]._applied.height = height ) - dh
                 );
             }
         };
 
 
-        var _getPartHeight
-            = methods.private.getPartHeight
+        var _getComponentHeight
             = function( settingsName )
         {
             return _settingsNameExists( settingsName )
@@ -332,21 +337,19 @@
         };
 
 
-        var _setPartMaxWidth
-            = methods.private.setPartMaxWidth
+        var _setComponentMaxWidth
             = function( settingsName, maxWidth )
         {
             if ( _settingsNameExists( settingsName ) )
             {
-                parts[ _settings2partsName( settingsName ) ].maxWidth(
+                components[ _settings2componentsName( settingsName ) ].maxWidth(
                     settings[ settingsName ]._applied.size.maxWidth = maxWidth
                 );
             }
         };
 
 
-        var _getPartMaxWidth
-            = methods.private.getPartMaxWidth
+        var _getComponentMaxWidth
             = function( settingsName )
         {
             return _settingsNameExists( settingsName )
@@ -355,21 +358,19 @@
         };
 
 
-        var _setPartMaxHeight
-            = methods.private.setPartMaxHeight
+        var _setComponentMaxHeight
             = function( settingsName, maxHeight )
         {
             if ( _settingsNameExists( settingsName ) )
             {
-                parts[ _settings2partsName( settingsName ) ].maxHeight(
+                components[ _settings2componentsName( settingsName ) ].maxHeight(
                     settings[ settingsName ]._applied.size.maxHeight = maxHeight
                 );
             }
         };
 
 
-        var _getPartMaxHeight
-            = methods.private.getPartMaxHeight
+        var _getComponentMaxHeight
             = function( settingsName )
         {
             return _settingsNameExists( settingsName )
@@ -378,20 +379,18 @@
         };
 
 
-        var _setPartStyle
-            = methods.private.setPartStyle
+        var _setComponentStyle
             = function( settingsName, style )
         {
             if ( _settingsNameExists( settingsName ) )
             {
-                _writePartStyle( settingsName, style );
-                settings[ settingsName ]._applied.style = _readPartStyle( settingsName );
+                _writeComponentStyle( settingsName, style );
+                settings[ settingsName ]._applied.style = _readComponentStyle( settingsName );
             }
         };
 
 
-        var _getPartStyle
-            = methods.private.getPartStyle
+        var _getComponentStyle
             = function( settingsName )
         {
             return _settingsNameExists( settingsName )
@@ -400,148 +399,132 @@
         };
 
 
-        var _writePartStyle
-            = methods.private.writePartStyle
+        var _writeComponentStyle
             = function( settingsName, style )
         {
             if ( _settingsNameExists( settingsName ) )
             {
                 if ( 'string' == typeof style )
                 {
-                    parts[ _settings2partsName( settingsName ) ].attr( 'style', style );
+                    components[ _settings2componentsName( settingsName ) ].attr( 'style', style );
                 }
                 else if ( 'object' == typeof style )
                 {
-                    parts[ _settings2partsName( settingsName ) ].css( style );
+                    components[ _settings2componentsName( settingsName ) ].css( style );
                 }
             }
         };
 
 
-        var _readPartStyle
-            = methods.private.readPartStyle
+        var _readComponentStyle
             = function( settingsName )
         {
             if ( _settingsNameExists( settingsName ) ) {
-                var style = parts[ _settings2partsName( settingsName ) ].attr( 'style' );
+                var style = components[ _settings2componentsName( settingsName ) ].attr( 'style' );
             }
             return style ? style : '';
         };
 
 
-        var _savePartStyle
-            = methods.private.savePartStyle
+        var _saveComponentStyle
             = function( settingsName )
         {
             if ( _settingsNameExists( settingsName ) )
             {
-                settings[ settingsName ]._applied.style = _readPartStyle( settingsName );
+                settings[ settingsName ]._applied.style = _readComponentStyle( settingsName );
             }
         };
 
 
-        var _saveAndWritePartStyle
-            = methods.private.savePartStyle
+        var _saveAndWriteComponentStyle
             = function( settingsName, style )
         {
             if ( _settingsNameExists( settingsName ) )
             {
-                _savePartStyle( settingsName );
-                _writePartStyle( settingsName, style );
+                _saveComponentStyle( settingsName );
+                _writeComponentStyle( settingsName, style );
             }
         };
 
 
-        var _restorePartStyle
-            = methods.private.restorePartStyle
+        var _restoreComponentStyle
             = function( settingsName )
         {
             if ( _settingsNameExists( settingsName ) ) {
-                _setPartStyle( settingsName, _getPartStyle( settingsName ) );
+                _setComponentStyle( settingsName, _getComponentStyle( settingsName ) );
             }
         };
 
-        // < pattern for setting/getting parts data
+        // < pattern for setting/getting components data
         // ·························································································
 
         // ·························································································
         // > aliases for setting/getting container's data
 
         var _setContainerWidth
-            = methods.private.setContainerWidth
             = function( width )
         {
-            _setPartWidth( 'container', width );
+            _setComponentWidth( 'container', width );
         };
 
         var _getContainerWidth
-            = methods.private.getContainerWidth
             = function()
         {
-            return _getPartWidth( 'container' );
+            return _getComponentWidth( 'container' );
         };
 
         var _setContainerHeight
-            = methods.private.setContainerHeight
             = function( height )
         {
-            _setPartHeight( 'container', height );
+            _setComponentHeight( 'container', height );
         };
 
         var _getContainerHeight
-            = methods.private.getContainerHeight
             = function()
         {
-            return _getPartHeight( 'container' );
+            return _getComponentHeight( 'container' );
         };
 
         var _setContainerStyle
-            = methods.private.setContainerStyle
             = function( style )
         {
-            _setPartStyle( 'container', style );
+            _setComponentStyle( 'container', style );
         };
 
         var _getContainerStyle
-            = methods.private.getContainerStyle
             = function()
         {
-            return _getPartStyle( 'container' );
+            return _getComponentStyle( 'container' );
         };
 
         var _writeContainerStyle
-            = methods.private.writeContainerStyle
             = function( style )
         {
-            _writePartStyle( 'container', style );
+            _writeComponentStyle( 'container', style );
         };
 
         var _readContainerStyle
-            = methods.private.readContainerStyle
             = function()
         {
-            return _readPartStyle( 'container' );
+            return _readComponentStyle( 'container' );
         };
 
         var _saveContainerStyle
-            = methods.private.saveContainerStyle
             = function()
         {
-            _savePartStyle( 'container' );
+            _saveComponentStyle( 'container' );
         };
 
         var _saveAndWriteContainerStyle
-            = methods.private.saveContainerStyle
             = function( style )
         {
-            _saveAndWritePartStyle( 'container', style );
+            _saveAndWriteComponentStyle( 'container', style );
         };
 
         var _restoreContainerStyle
-            = methods.private.restoreContainerStyle
             = function()
         {
-            _restorePartStyle( 'container' );
+            _restoreComponentStyle( 'container' );
         };
 
         // < aliases for setting/getting container's data
@@ -552,108 +535,93 @@
         // > aliases for setting/getting headers' data
 
         var _setHeadersWidth
-            = methods.private.setHeadersWidth
             = function( width )
         {
-            _setPartWidth( 'headers', width );
+            _setComponentWidth( 'headers', width );
         };
 
         var _getHeadersWidth
-            = methods.private.getHeadersWidth
             = function()
         {
-            return _getPartWidth( 'headers' );
+            return _getComponentWidth( 'headers' );
         };
 
         var _setHeadersHeight
-            = methods.private.setHeadersHeight
             = function( height )
         {
-            _setPartHeight( 'headers', height );
+            _setComponentHeight( 'headers', height );
         };
 
         var _getHeadersHeight
-            = methods.private.getHeadersHeight
             = function()
         {
-            return _getPartHeight( 'headers' );
+            return _getComponentHeight( 'headers' );
         };
 
         var _setHeadersMaxWidth
-            = methods.private.setHeadersMaxWidth
             = function( width )
         {
-            _setPartMaxWidth( 'headers', width );
+            _setComponentMaxWidth( 'headers', width );
         };
 
         var _getHeadersMaxWidth
-            = methods.private.getHeadersMaxWidth
             = function()
         {
-            return _getPartMaxWidth( 'headers' );
+            return _getComponentMaxWidth( 'headers' );
         };
 
         var _setHeadersMaxHeight
-            = methods.private.setHeadersMaxHeight
             = function( height )
         {
-            _setPartMaxHeight( 'headers', height );
+            _setComponentMaxHeight( 'headers', height );
         };
 
         var _getHeadersMaxHeight
-            = methods.private.getHeadersMaxHeight
             = function()
         {
-            return _getPartMaxHeight( 'headers' );
+            return _getComponentMaxHeight( 'headers' );
         };
 
         var _setHeadersStyle
-            = methods.private.setHeadersStyle
             = function( style )
         {
-            _setPartStyle( 'headers' );
+            _setComponentStyle( 'headers' );
         };
 
         var _getHeadersStyle
-            = methods.private.getHeadersStyle
             = function()
         {
-            return _getPartStyle( 'headers' );
+            return _getComponentStyle( 'headers' );
         };
 
         var _writeHeadersStyle
-            = methods.private.writeHeadersStyle
             = function( style )
         {
-            _writePartStyle( 'headers', style );
+            _writeComponentStyle( 'headers', style );
         };
 
         var _readHeadersStyle
-            = methods.private.readHeadersStyle
             = function()
         {
-            return _readPartStyle( 'headers' );
+            return _readComponentStyle( 'headers' );
         };
 
         var _saveHeadersStyle
-            = methods.private.saveHeadersStyle
             = function()
         {
-            _savePartStyle( 'headers' );
+            _saveComponentStyle( 'headers' );
         };
 
         var _saveAndWriteHeadersStyle
-            = methods.private.saveHeadersStyle
             = function( style )
         {
-            _saveAndWritePartStyle( 'headers', style );
+            _saveAndWriteComponentStyle( 'headers', style );
         };
 
         var _restoreHeadersStyle
-            = methods.private.restoreHeadersStyle
             = function()
         {
-            _restorePartStyle( 'headers' );
+            _restoreComponentStyle( 'headers' );
         };
 
         // < aliases for setting/getting headers' data
@@ -664,10 +632,9 @@
         // > extra methods for headers
 
         var _setHeadersWidths
-            = methods.private.setHeadersWidths
             = function( widths )
         {
-            parts.$headers.each( function ( num )
+            components.$headers.each( function ( num )
             {
                 if ( 'undefined' != typeof widths[ num ] )
                 {
@@ -678,7 +645,6 @@
         };
 
         var _getHeadersWidths
-            = methods.private.getHeadersWidths
             = function( num )
         {
             if ( 'undefined' == typeof num )
@@ -699,108 +665,93 @@
         // > aliases for setting/getting databoxes' data
 
         var _setDataboxesWidth
-            = methods.private.setDataboxesWidth
             = function( width )
         {
-            _setPartWidth( 'databoxes', width );
+            _setComponentWidth( 'databoxes', width );
         };
 
         var _getDataboxesWidth
-            = methods.private.getDataboxesWidth
             = function()
         {
-            return _getPartWidth( 'databoxes' );
+            return _getComponentWidth( 'databoxes' );
         };
 
         var _setDataboxesHeight
-            = methods.private.setDataboxesHeight
             = function( height )
         {
-            _setPartHeight( 'databoxes', height );
+            _setComponentHeight( 'databoxes', height );
         };
 
         var _getDataboxesHeight
-            = methods.private.getDataboxesHeight
             = function()
         {
-            return _getPartHeight( 'databoxes' );
+            return _getComponentHeight( 'databoxes' );
         };
 
         var _setDataboxesMaxWidth
-            = methods.private.setDataboxesMaxWidth
             = function( width )
         {
-            _setPartMaxWidth( 'databoxes', width );
+            _setComponentMaxWidth( 'databoxes', width );
         };
 
         var _getDataboxesMaxWidth
-            = methods.private.getDataboxesMaxWidth
             = function()
         {
-            return _getPartMaxWidth( 'databoxes' );
+            return _getComponentMaxWidth( 'databoxes' );
         };
 
         var _setDataboxesMaxHeight
-            = methods.private.setDataboxesMaxHeight
             = function( height )
         {
-            _setPartMaxHeight( 'databoxes', height );
+            _setComponentMaxHeight( 'databoxes', height );
         };
 
         var _getDataboxesMaxHeight
-            = methods.private.getDataboxesMaxHeight
             = function()
         {
-            return _getPartMaxHeight( 'databoxes' );
+            return _getComponentMaxHeight( 'databoxes' );
         };
 
         var _setDataboxesStyle
-            = methods.private.setDataboxesStyle
             = function( style )
         {
-            _setPartStyle( 'databoxes', style );
+            _setComponentStyle( 'databoxes', style );
         };
 
         var _getDataboxesStyle
-            = methods.private.getDataboxesStyle
             = function()
         {
-            return _getPartStyle( 'databoxes' );
+            return _getComponentStyle( 'databoxes' );
         };
 
         var _writeDataboxesStyle
-            = methods.private.writeDataboxesStyle
             = function( style )
         {
-            _writePartStyle( 'databoxes', style );
+            _writeComponentStyle( 'databoxes', style );
         };
 
         var _readDataboxesStyle
-            = methods.private.readDataboxesStyle
             = function()
         {
-            return _readPartStyle( 'databoxes' );
+            return _readComponentStyle( 'databoxes' );
         };
 
         var _saveDataboxesStyle
-            = methods.private.saveDataboxesStyle
             = function()
         {
-            _savePartStyle( 'databoxes' );
+            _saveComponentStyle( 'databoxes' );
         };
 
         var _saveAndWriteDataboxesStyle
-            = methods.private.saveDataboxesStyle
             = function( style )
         {
-            _saveAndWritePartStyle( 'databoxes', style );
+            _saveAndWriteComponentStyle( 'databoxes', style );
         };
 
         var _restoreDataboxesStyle
-            = methods.private.restoreDataboxesStyle
             = function()
         {
-            _restorePartStyle( 'databoxes' );
+            _restoreComponentStyle( 'databoxes' );
         };
 
         // < aliases for setting/getting databoxes' data
@@ -815,7 +766,6 @@
         // >> helpers to analyze and initialize
 
         var _splitClassList
-            = methods.private.splitClassList
             = function( classList )
         {
             return classList.split( /[^\w\d\.\-\_]+/ );
@@ -823,7 +773,6 @@
 
 
         var _px2number
-            = methods.private.px2number
             = function( val )
         {
             if ( 'number' == typeof val )
@@ -839,18 +788,17 @@
         }; // var _px2number = function( val )
 
 
-        var _scanParts
-            = methods.private.scanParts
-            = function( settingsName, $parts )
+        var _scanComponents
+            = function( settingsName, $components )
         {
             if ( _settingsNameExists( settingsName ) )
             {
-                var partsName = _settings2partsName( settingsName );
-                $parts = $parts ? $parts : parts[ partsName ];
+                var componentsName = _settings2componentsName( settingsName );
+                $components = $components ? $components : components[ componentsName ];
 
                 var scanResult =
                 {
-                    'count'         : $parts.size(),
+                    'count'         : $components.size(),
                     'size'          :
                     {
                         'minWidth'      : false,
@@ -861,7 +809,7 @@
                     'items'         : []
                 };
 
-                $parts.each( function ( num )
+                $components.each( function ( num )
                 {
                     var $this = $( this );
                     var width = $this.outerWidth();
@@ -901,64 +849,60 @@
                 return scanResult;
             }
             return false;
-        }; // var _scanParts = function( $parts ) {
+        }; // var _scanComponents = function( $components ) {
 
 
-        var _findParts
-            = methods.private.findParts
+        var _findComponents
             = function( $container )
         {
-            parts.$container    = $container;
-            parts.$headers      = $(
+            components.$container    = $container;
+            components.$headers      = $(
                 settings.headers.selector,
-                parts.$container
+                components.$container
             );
-            parts.$databoxes    = $(
+            components.$databoxes    = $(
                 settings.databoxes.selector,
-                parts.$container
+                components.$container
             );
 
-            for ( var i in parts ) {
-                parts[ i ].data( _NSPC_, self );
+            for ( var i in components ) {
+                components[ i ].data( _NSPC_, self );
             }
-        }; // var _findParts = function( $container )
+        }; // var _findComponents = function( $container )
 
 
-        var _applyCssToParts
-            = methods.private.applyCssToParts
+        var _applyCssToComponents
             = function()
         {
             var settingsNames = [ 'container', 'headers', 'databoxes' ];
             for ( var i in settingsNames )
             {
                 var settingsName = settingsNames[ i ];
-                parts[ _settings2partsName( settingsName ) ].css( settings[ settingsName ].style );
+                components[ _settings2componentsName( settingsName ) ].css( settings[ settingsName ].style );
             }
-        }; // var _applyCssToParts = function()
+        }; // var _applyCssToComponents = function()
 
 
-        var _applyClassesToParts
-            = methods.private.applyClassesToParts
+        var _applyClassesToComponents
             = function()
         {
             var settingsNames = [ 'container', 'headers', 'databoxes' ];
             for ( var i in settingsNames )
             {
                 var settingsName = settingsNames[ i ];
-                var partsName = _settings2partsName( settingsName );
+                var componentsName = _settings2componentsName( settingsName );
                 var classesToAdd = _splitClassList(
                     settings[ settingsName ].classesToAdd
                 ).join( ' ' );
 
-                parts[ partsName ].addClass(
+                components[ componentsName ].addClass(
                     classesToAdd + ' ' + settings[ settingsName ].classToAdd
                 );
             }
-        }; // var _applyCssToParts = function()
+        }; // var _applyCssToComponents = function()
 
 
         var _initializeSettings
-            = methods.private.initializeSettings
             = function( options )
         {
             var settingsNames = [ 'container', 'headers', 'databoxes' ];
@@ -986,15 +930,14 @@
         }; // var _initializeSettings = function( options )
 
 
-        var _scanalyzePart
-            = methods.private.scanalyzePart
+        var _scanalyzeComponent
             = function( settingsName, resultsCallback )
         {
             if ( _settingsNameExists( settingsName ) )
             {
-                _saveAndWritePartStyle( settingsName, settings[ settingsName ].styleBeforeScan );
+                _saveAndWriteComponentStyle( settingsName, settings[ settingsName ].styleBeforeScan );
 
-                var partsName = _settings2partsName( settingsName );
+                var componentsName = _settings2componentsName( settingsName );
 
                 var results =
                 {
@@ -1005,8 +948,8 @@
                     'height'                : settings[ settingsName ].height,
                     'size'                  :
                     {
-                        'width'                 : parts[ partsName ].outerWidth(),
-                        'height'                : parts[ partsName ].outerHeight()
+                        'width'                 : components[ componentsName ].outerWidth(),
+                        'height'                : components[ componentsName ].outerHeight()
                     }
                 };
 
@@ -1016,19 +959,18 @@
 
                 $.extend( true, settings[ settingsName ]._applied, results );
 
-                _restorePartStyle( settingsName );
+                _restoreComponentStyle( settingsName );
             }
-        }; // var _scanalyzePart = function( settingsName, resultsCallback )
+        }; // var _scanalyzeComponent = function( settingsName, resultsCallback )
 
 
-        var _processPartsResults
-            = methods.private.processPartsResults
-            = function( settingsName, partsResults )
+        var _processComponentsResults
+            = function( settingsName, componentsResults )
         {
             if ( _settingsNameExists( settingsName ) )
             {
-                var partsName = _settings2partsName( settingsName );
-                var scanResult = _scanParts( settingsName );
+                var componentsName = _settings2componentsName( settingsName );
+                var scanResult = _scanComponents( settingsName );
 
                 var results =
                 {
@@ -1039,11 +981,11 @@
                     'size'                  : scanResult.size
                 };
 
-                delete partsResults.size.width;
-                delete partsResults.size.height;
+                delete componentsResults.size.width;
+                delete componentsResults.size.height;
 
                 status[ settingsName ] = scanResult.items;
-                parts[ partsName ].each( function( num )
+                components[ componentsName ].each( function( num )
                 {
                     var data =
                     {
@@ -1053,13 +995,12 @@
                     $( this ).data( _DATA_, data );
                 } );
 
-                return $.extend( true, partsResults, results );
+                return $.extend( true, componentsResults, results );
             }
-        }; // var _processPartsResults = function( settingsName, partsResults )
+        }; // var _processComponentsResults = function( settingsName, componentsResults )
 
 
         var _applyContainerDimensions
-            = methods.private.applyContainerDimensions
             = function( onlyfixed )
         {
             var val = _px2number( settings.container.width );
@@ -1085,7 +1026,6 @@
 
 
         var _applyHeadersDimensions
-            = methods.private.applyHeadersDimensions
             = function( onlyfixed )
         {
             var val = _px2number( settings.headers.width );
@@ -1124,7 +1064,6 @@
 
 
         var _applyDataboxesDimensions
-            = methods.private.applyDataboxesDimensions
             = function( onlyfixed )
         {
             var val = _px2number( settings.databoxes.width );
@@ -1158,7 +1097,6 @@
 
 
         var _applyDimensionsFinally
-            = methods.private.applyDimensionsFinally
             = function()
         {
             _applyHeadersDimensions( true );
@@ -1169,13 +1107,12 @@
         }; // var _applyDimensionsFinally = function( onlyfixed )Finally
 
 
-        var _positioningParts
-            = methods.private.positioningParts
+        var _positioningComponents
             = function()
         {
             var settingsName = 'headers';
-            var partsName = _settings2partsName( settingsName );
-            parts[ partsName ].each( function( num ) {
+            var componentsName = _settings2componentsName( settingsName );
+            components[ componentsName ].each( function( num ) {
                 var $this = $( this );
 
                 var width = status[ settingsName ][ num ].size.width;
@@ -1188,8 +1125,8 @@
             } );
 
             var settingsName = 'databoxes';
-            var partsName = _settings2partsName( settingsName );
-            parts[ partsName ].each( function( num ) {
+            var componentsName = _settings2componentsName( settingsName );
+            components[ componentsName ].each( function( num ) {
                 var $this = $( this );
 
                 var width = status[ settingsName ][ num ].size.width;
@@ -1201,26 +1138,46 @@
 
             } );
 
-        }; // var _positioningParts = function( onlyfixed )Finally
+        }; // var _positioningComponents = function( onlyfixed )Finally
 
 
         var _updateEventHandler
-            = methods.private.updateEventHandler
             = function()
         {
+            var bindDraggingHandler = false;
+
             if ( settings.headers.clickable )
             {
-                parts.$headers
+                components.$headers
                     .unbind( 'click' + _NSPC_ )
                     .bind( 'click' + _NSPC_, _clickHeader );
             }
 
             if ( settings.headers.draggable )
             {
-                parts.$headers
+                components.$headers
                     .unbind( 'mousedown' + _NSPC_ )
                     .bind( 'mousedown' + _NSPC_, _startDragHeader );
 
+                bindDraggingHandler = true;
+            }
+
+            if ( settings.databoxes.draggable )
+            {
+                components.$databoxes
+                    .unbind( 'mousedown' + _NSPC_ )
+                    .bind( 'mousedown' + _NSPC_, _startDragDatabox );
+                $( '*', components.$databoxes )
+                    .unbind( 'click' + _NSPC_ )
+                    .bind( 'click' + _NSPC_, _clickDataboxChild );
+
+                //$( 'a' ).bind( 'click', function(e) { e.preventDefault();return false;} );
+
+                bindDraggingHandler = true;
+            }
+
+            if ( bindDraggingHandler )
+            {
                 var $document = $( document );
                 $document
                     .unbind( 'mouseup' + _UNSPC_ )
@@ -1230,7 +1187,7 @@
                     .bind( 'mousemove' + _UNSPC_, _documentMouseMove );
             }
 
-            parts.$container
+            components.$container
                 .unbind( 'scroll' + _NSPC_ )
                 .bind( 'scroll' + _NSPC_, _scrollContainer );
         }; // var _updateEventHandler = function( onlyfixed )Finally
@@ -1243,7 +1200,6 @@
         // >> callbacks for events handler
 
         var _scrollContainer
-            = methods.private.scrollContainer
             = function( e )
         {
             setPos( $( this ).scrollLeft() );
@@ -1251,7 +1207,6 @@
 
 
         var _clickHeader
-            = methods.private.clickHeader
             = function( e )
         {
             if ( status.draggingHeader.dragged )
@@ -1272,8 +1227,24 @@
         }; // var _clickHeader = function( e )
 
 
+        var _clickDataboxChild
+            = function( e )
+        {
+            if ( !status.draggingDatabox.dragged )
+            {
+                return;
+            }
+
+            if ( settings.databoxes.preventDragEvent )
+            {
+                e.stopPropagation();
+                e.preventDefault();
+                return false;
+             }
+        }; // var _clickDatabox = function( e )
+
+
         var _startDragHeader
-            = methods.private.startDragHeader
             = function( e )
         {
             status.draggingHeader.active = true;
@@ -1290,21 +1261,60 @@
         }; // var _startDragHeader = function( e )
 
 
-        var _documentMouseUp
-            = methods.private.documentMouseUp
+        var _startDragDatabox
             = function( e )
         {
+            status.draggingDatabox.active = true;
+            status.draggingDatabox.startEvent = e;
+            status.draggingDatabox.initialPos = getPos();
+            status.draggingDatabox.dragged = false;
+
+            if ( settings.databoxes.preventDragEvent )
+            {
+                e.stopPropagation();
+                e.preventDefault();
+                return false;
+            }
+        }; // var _startDragDatabox = function( e )
+
+
+        var _documentMouseUp
+            = function( e )
+        {
+            var preventDragEvent = false;
+
             if ( status.draggingHeader.active )
             {
                 status.draggingHeader.active = false;
+                if ( settings.headers.preventDragEvent )
+                {
+                    preventDragEvent = true;
+                }
             }
+
+            if ( status.draggingDatabox.active )
+            {
+                status.draggingDatabox.active = false;
+                if ( settings.databoxes.preventDragEvent )
+                {
+                    preventDragEvent = true;
+                }
+            }
+
+            if ( preventDragEvent )
+            {
+                e.stopPropagation();
+                e.preventDefault();
+                return false;
+            }
+
         }; // var _documentMouseUp = function( e )
 
 
         var _documentMouseMove
-            = methods.private.documentMouseMove
             = function( e )
         {
+            var preventDragEvent = false;
 
             if ( status.draggingHeader.active )
             {
@@ -1324,11 +1334,52 @@
 
                 if ( settings.headers.preventDragEvent )
                 {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    return false;
+                    preventDragEvent = true;
                 }
             }
+
+            if ( status.draggingDatabox.active )
+            {
+                var deltaV = status.draggingDatabox.startEvent.screenY - e.screenY;
+                var delta = status.draggingDatabox.startEvent.screenX - e.screenX;
+
+                if ( 0 != delta )
+                {
+                    if ( !status.draggingDatabox.dragged )
+                    {
+                        _startDragDatabox( e );
+                    }
+                    status.draggingDatabox.dragged = true;
+                    status.draggingDatabox.maxDist = 0;
+                    stop();
+                }
+
+                status.draggingDatabox.maxDist = Math.max(
+                    Math.abs( delta ),
+                    status.draggingDatabox.maxDist
+                );
+
+                if ( 10 < Math.abs( deltaV ) && 10 > status.draggingDatabox.maxDist )
+                {
+                    status.draggingDatabox.active = false;
+                }
+
+
+                setPos( status.draggingDatabox.initialPos + delta );
+
+                if ( settings.databoxes.preventDragEvent )
+                {
+                    preventDragEvent = true;
+                }
+            }
+
+            if ( preventDragEvent )
+            {
+                e.stopPropagation();
+                e.preventDefault();
+                return false;
+            }
+
         }; // var _documentMouseMove = function( e )
 
         // << callbacks for events handler
@@ -1355,55 +1406,39 @@
             _initializeSettings( options );
 
             // find the components
-            _findParts( $this );
+            _findComponents( $this );
 
             // apply given styles to the components
-            _applyCssToParts();
+            _applyCssToComponents();
 
             // detect data for the container
-            _scanalyzePart( 'container' );
+            _scanalyzeComponent( 'container' );
 
             // set container to fixed size, if necessary
             _applyContainerDimensions( true );
 
             // detect data for headers and databoxes
-            _scanalyzePart( 'headers', _processPartsResults );
-            _scanalyzePart( 'databoxes', _processPartsResults );
+            _scanalyzeComponent( 'headers', _processComponentsResults );
+            _scanalyzeComponent( 'databoxes', _processComponentsResults );
 
             // add classes to the components and refresh the given styles
-            _applyClassesToParts();
-            _applyCssToParts();
+            _applyClassesToComponents();
+            _applyCssToComponents();
 
             // set the dimensions of all components
             _applyDimensionsFinally();
 
             // arrange headers and databoxes
-            _positioningParts();
+            _positioningComponents();
 
             // bind event handler
             _updateEventHandler();
 
-            // party
+            // componenty
             goTo( 0 );
 
             return $this;
         }; // var init = function ( options )
-
-
-        var getPos
-            = methods.public.getPos
-            = function()
-        {
-            return status.pos;
-        }; // var getPos = function()
-
-
-        var stop
-            = methods.public.stop
-            = function()
-        {
-            parts.$container.stop();
-        }; // var stop = function()
 
 
         var setPos
@@ -1429,7 +1464,7 @@
                 var properties = {};
                 properties[ propertyName ] = 1;
                 var startPos = getPos();
-                parts.$container.css( currentProperties ).animate( properties,
+                components.$container.css( currentProperties ).animate( properties,
                 {
                     'duration'              : duration,
                     'easing'                : easing,
@@ -1460,9 +1495,9 @@
 
             var $headers =
             {
-                'active'    : ( false !== active ? parts.$headers.eq( active ) : false ),
-                'prev'      : ( false !== prev ? parts.$headers.eq( prev ) : false ),
-                'next'      : ( false !== next ? parts.$headers.eq( next ) : false )
+                'active'    : ( false !== active ? components.$headers.eq( active ) : false ),
+                'prev'      : ( false !== prev ? components.$headers.eq( prev ) : false ),
+                'next'      : ( false !== next ? components.$headers.eq( next ) : false )
             };
 
             var headerWidths =
@@ -1508,7 +1543,7 @@
 
             if ( false !== active )
             {
-                headers.active.$        = parts.$headers.eq( active );
+                headers.active.$        = components.$headers.eq( active );
                 headers.active.width    = status.headers[ active ].size.width;
                 headers.active.pos      = _getContainerWidth() * ( active + 0.5 );
                 headers.active.min      = headers.active.pos - headerWidths.active / 2;
@@ -1519,7 +1554,7 @@
 
             if ( false !== prev )
             {
-                headers.prev.$          = parts.$headers.eq( prev );
+                headers.prev.$          = components.$headers.eq( prev );
                 headers.prev.width      = status.headers[ prev ].size.width;
                 headers.prev.pos        = _getContainerWidth() * ( prev + 0.5 );
                 headers.prev.min        = headers.prev.pos - headerWidths.prev / 2;
@@ -1530,7 +1565,7 @@
 
             if ( false !== next )
             {
-                headers.next.$          = parts.$headers.eq( next );
+                headers.next.$          = components.$headers.eq( next );
                 headers.next.width      = status.headers[ next ].size.width;
                 headers.next.pos        = _getContainerWidth() * ( next + 0.5 );
                 headers.next.min        = headers.next.pos - headerWidths.next / 2;
@@ -1624,9 +1659,9 @@
                 } );
             }
 
-            parts.$container.scrollLeft( pos );
+            components.$container.scrollLeft( pos );
 
-            var $otherheaders = parts.$headers.not( headers.active.$ );
+            var $otherheaders = components.$headers.not( headers.active.$ );
             var classNames = settings.headers._applied.classesToAddActive.join( ' ' );
             $otherheaders.removeClass( classNames );
             headers.active.$.addClass( classNames );
@@ -1636,6 +1671,70 @@
             status.activated_setPos = false;
 
         }; // var setPos = function( pos, animated, duration, easing )
+
+
+        var getPos
+            = methods.public.getPos
+            = function()
+        {
+            return status.pos;
+        }; // var getPos = function()
+
+
+        var stop
+            = methods.public.stop
+            = function()
+        {
+            components.$container.stop();
+        }; // var stop = function()
+
+
+        var count
+            = methods.public.count
+            = function()
+        {
+            return Math.max( status.headers.length, status.databoxes.length );
+        }; // var count = function()
+
+
+        var maxPos
+            = methods.public.maxPos
+            = function()
+        {
+                return ( count() - 1 ) * _getContainerWidth();
+        }; // var maxPos = function()
+
+
+        var goToFirst
+            = methods.public.goToFirst
+            = function( animated, duration, easing )
+        {
+            goTo( 0, animated, duration, easing );
+        }; // var goToFirst = function( animated, duration, easing )
+
+
+        var goToLast
+            = methods.public.goToLast
+            = function( animated, duration, easing )
+        {
+            goTo( count() - 1, animated, duration, easing );
+        }; // var goToLast = function( animated, duration, easing )
+
+
+        var goToPrev
+            = methods.public.goToPrev
+            = function( dontround, animated, duration, easing )
+        {
+            goTo( getCurrentNum( dontround ) - 1, animated, duration, easing );
+        }; // var goToPrev = function( animated, duration, easing )
+
+
+        var goToNext
+            = methods.public.goToNext
+            = function( dontround, animated, duration, easing )
+        {
+            goTo( getCurrentNum( dontround ) + 1, animated, duration, easing );
+        }; // var goToNext = function( animated, duration, easing )
 
 
         var goTo
@@ -1648,6 +1747,20 @@
 
             setPos( _getContainerWidth() * num, animated, duration, easing );
         }; // var goTo = function( num, animated, duration, easing )
+
+
+        var getCurrentNum
+            = methods.public.getCurrentNum
+            = function( dontround )
+        {
+            var currentNum = getPos() / _getContainerWidth();
+            if ( 'boolean' != typeof dontround || !dontround )
+            {
+                currentNum = Math.round( currentNum );
+            }
+            return currentNum;
+        }; // var getCurrentNum = function()
+
 
 
         var getDefaultOptions
@@ -1706,7 +1819,7 @@
                 var ret = plugin.methods.public.init.apply( $this, args );
                 firstreturn = ( null !== firstreturn ) ? firstreturn : ret;
             } else {
-                $.error( 'Method ' +  method + ' does not exist on jQuery.dlsldr' );
+                $.error( 'Method ' +  method + ' does not exist on jQuery.' + _NAME_ );
             }
         } );
 
