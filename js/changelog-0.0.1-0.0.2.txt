@@ -1,3 +1,13 @@
 renamed "delay" to "duration"
 removed some obsolete comments
 changed animation internals, so the titles doesn't twitch anymore in some browsers (i.e. IE - sweet polysem ^^)
+
+renamed "parts" to "components"
+removed unecessary assignments to methods.private (reduces size of minified version)
+added method "count"
+added method "goToFirst"
+added method "goToLast"
+added method "goToPrev"
+added method "goToNext"
+added method "getCurrentNum"
+added option to drag databoxes
