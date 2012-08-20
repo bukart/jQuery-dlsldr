@@ -1,0 +1,25 @@
+dl.dlsldr dd
+{
+    margin: 0;
+    padding: 10px;
+}
+
+dl.dlsldr dt
+{
+    cursor:pointer;
+}
+
+dl.dlsldr dt h3
+{
+    color:#777;
+}
+
+dl.dlsldr dt.dlsldr-active h3
+{
+    color:inherit;
+}
+
+h1 a {
+    color:#222;
+    font-weight:inherit;
+}

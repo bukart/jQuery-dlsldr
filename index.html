@@ -7,6 +7,7 @@
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <link rel="stylesheet" href="css/default.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -15,7 +16,7 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1>jQuery - dlsldr</h1>
+        <h1><a href="#jquerydlsldr" onclick="jQuery('.dlsldr').dlsldr( 'goTo', 0, true)">jQuery - dlsldr</a></h1>
         <p>An simple slider for html data lists (&lt;dl&gt;)</p>
 
         <p class="view"><a href="https://github.com/bukart/jQuery-dlsldr">View the Project on GitHub <small>bukart/jQuery-dlsldr</small></a></p>
@@ -28,32 +29,62 @@
         </ul>
       </header>
       <section>
-        <h3>Welcome to GitHub Pages.</h3>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+        <dl class="dlsldr">
+            <dt><h3>jQuery - dlsldr</h3></dt>
+            <dd>
+                <p>This jQuery plugin transforms a simple html definition list structure (&lt;dl&gt;&hellip;&lt;/dl&gt;) into this slider. The following slides shows you some interresting information about it.</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+                <p>Let's start with the <a href="#markup" onclick="jQuery('.dlsldr').dlsldr( 'goTo', 1, true)">markup</a> or view <a href="#index" onclick="jQuery('.dlsldr').dlsldr( 'goToLast' )">the index</a>.</p>
+            </dd>
+
+            <dt><h3>Markup</h3></dt>
+            <dd>
+                <p>The Markup is quite simple.</p>
+
+                <pre><code>&lt;dl&gt;
+    &lt;dt&gt;some title&lt;/dt&gt;
+    &lt;dd&gt;some content&lt;/dd&gt;
+    &hellip;
+&lt;/dl&gt;
 </code></pre>
+                <p>After this, you only have to tell the plugin to start: <a href="#initialization" onclick="jQuery('.dlsldr').dlsldr( 'goTo', 2, true);">Initialization</a>.</p>
+            </dd>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+            <dt><h3>Initialization</h3></dt>
+            <dd>
+                <p>To initialize to plugin just use this little snippet inside your javascript</p>
 
-<h3>Designer Templates</h3>
+                <pre><code>$( '.dlsldr' ).dlsldr();</code></pre>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+                <p>and it's done.</p>
 
-<h3>Rather Drive Stick?</h3>
+                <p>Off course, there're many of options and also some methods to interact with, but this is all you need to getting started.</p>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+                <p>If you are bored of clicking this slides one by one, just try to click or move a title or the contents directly ;-)</p>
 
-<h3>Authors and Contributors</h3>
+                <p>Now dive in, an get <a href="#moreinformation" onclick="jQuery('.dlsldr').dlsldr( 'goTo', 3, true);">more information</a>.</p>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+            </dd>
 
-<h3>Support or Contact</h3>
+            <dt><h3>More information</h3></dt>
+            <dd>
+                <p>Unfortunately there isn't any more information here, since they'll be written. Please take a look at the <a href="https://github.com/bukart/jQuery-dlsldr/blob/master/README.md" target="githubdlsldr" title="readme">readme</a> of this project.</p>
+            </dd>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+            <dt><h3>Index</h3></dt>
+            <dd>
+                <ol>
+                    <li><a href="#jquerydlsldr" onclick="jQuery('.dlsldr').dlsldr( 'goTo', 0, true)">jQuery - dlsldr</a></li>
+                    <li><a href="#markup" onclick="jQuery('.dlsldr').dlsldr( 'goTo', 1, true)">Markup</a></li>
+                    <li><a href="#markup" onclick="jQuery('.dlsldr').dlsldr( 'goTo', 2, true);">Initialization</a></li>
+                    <li><a href="#moreinformation" onclick="jQuery('.dlsldr').dlsldr( 'goTo', 3, true);">More information</a></li>
+                    <li><a href="#index" onclick="jQuery('.dlsldr').dlsldr( 'goToLast', true );">Index - you are here!1!</a></li>
+                </ol>
+            </dd>
+
+        </dl>
+
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/bukart">bukart</a></p>
@@ -61,6 +92,20 @@ $ git checkout gh-pages
       </footer>
     </div>
     <script src="javascripts/scale.fix.js"></script>
+    <script src="javascripts/jquery-1.8.0.min.js"></script>
+    <script src="javascripts/dlsldr-0.0.2.min.js"></script>
+    <script type="text/javascript">
+    // <![CDATA[
+        ;( function( $ )
+        {
+            $( function()
+            {
+                $( '.dlsldr' ).dlsldr();
+            } );
+        } ( jQuery ) );
+    // ]]>
+    </script>
+
               <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
