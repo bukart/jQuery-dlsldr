@@ -12,7 +12,7 @@ A simple slider for html definition lists (&lt;dl&gt;&hellip;&lt;/dl&gt;)
 <dl>
     <dt>some title</dt>
     <dd>some content</dd>
-    &hellip;
+    …
 </dl>
 ```
 ### Methods
