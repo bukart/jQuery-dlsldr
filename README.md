@@ -1,22 +1,18 @@
 # dlsldr
 
-A simple slider for html data lists (&lt;dl>)
+A simple slider for html definition lists (&lt;dl&gt;&hellip;&lt;/dl&gt;)
 
 > **Mhh... why I believe this slider is indispensable?**<br/>
-> *Well, it doesn't touch your markup, and it's based on the scrolling position of the &lt;dl>-element.*
-
-## Example
-
-Hey, just [visit the github page about this plugin](http://bukart.github.com/jQuery-dlsldr/), to see it in action.
+> *Well, it doesn't touch your markup, and it's based on the scrolling position of the &lt;dl&gt;-element.*
 
 ## Usage
 
 ### Markup
 ```
 <dl>
-    <dt>title markup</dt>
-    <dd>content markup</dd>
-    ...
+    <dt>some title</dt>
+    <dd>some content</dd>
+    &hellip;
 </dl>
 ```
 ### Methods
