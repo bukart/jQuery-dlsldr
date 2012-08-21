@@ -1,5 +1,5 @@
 /**
- * A simple slider for html data lists (<dl>)
+ * A simple slider for html definition lists (<dl>…</dl>)
  *
  * @name dlsldr
  * @version 0.0.2
