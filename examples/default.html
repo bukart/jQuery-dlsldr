@@ -21,15 +21,14 @@
                 font-size           : 1.6rem;
                 line-height         : 1.25;
                 background          : #888;
-                margin              : 0px;
             }
 
             dl
             {
                 width               : 600px;
-                margin              : 0px auto;
+                margin              : 50px auto;
                 color               : #000;
-                background          : #000;
+                background          : #aaa;
             }
 
             dl dt
@@ -39,7 +38,7 @@
                 font-weight         : bold;
                 cursor              : pointer;
                 text-decoration     : underline;
-                padding             : 10px 0px;
+                padding             : 10px;
             }
 
             dl dd
@@ -63,7 +62,7 @@
 
             dl dt.dlsldr-active
             {
-                color               : #fff;
+                color               : #000;
             }
 
             dl.hscroll {
@@ -361,7 +360,7 @@
             {
                 $( function()
                 {
-                    $( 'dl' ).dlsldr( { 'container' : { 'height' : 400 } } );
+                    $( 'dl' ).dlsldr( { 'container' : { 'height' : 500 } } );
                     $( 'dl' ).dlsldr( 'goTo', 2 );
                 } );
             } ( jQuery ) );
