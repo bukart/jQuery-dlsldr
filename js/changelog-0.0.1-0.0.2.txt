@@ -11,3 +11,7 @@ added method "goToPrev"
 added method "goToNext"
 added method "getCurrentNum"
 added option to drag databoxes
+
+added option to snap on dragging headers & dataoxes
+added option to center item after dragging headers & databoxes
+added support for touch events
