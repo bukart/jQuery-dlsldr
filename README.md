@@ -164,17 +164,26 @@ var defaultOptions =
                                                     // while using 'auto' the height for all
                                                     // headers is the height of the highest
                                                     // header
-        'gapSize'               : 0,                // the minimal gap between two clashing
+        'gapSize'               : 10,               // the minimal gap between two clashing
                                                     // headers
                                                     // allowed values: number >= 0
         'clickable'             : true,             // true: clicking on a header scrolls to
                                                     // the corresponding content
         'draggable'             : true,             // true: headers can be dragged
-        'preventClickEvent'     : true,             // true: calls stopPropagation() and
-                                                    // preventDefault() for the click event
-        'preventDragEvent'      : true,             // true: calls stopPropagation() and
-                                                    // preventDefault() for the click and
-                                                    // move events while dragging
+        'touchdrag'             : true,             // true: headers can be dragged with
+                                                    // touch events
+        'snapping'              : true,             // true: headers will snap to center
+                                                    // if moved near to the center
+        'snappingDistance'      : 25,               // distance to snap headers
+        'centerAfterDragging'   : true,             // true: centers the current item when
+                                                    // mouse releases
+        'centerAfterTouchDrag'  : true,             // true: centers the current item when
+                                                    // touch event ends
+        'preventClickEvent'     : true,             // true: calls preventDefault() for the
+                                                    // click event
+        'preventDragEvent'      : true,             // true: calls preventDefault() for the
+                                                    // click and move events while dragging
+        'preventTouchEvent'     : false,            // true: calls preventDefault()
         'style'                 : {}                // some styles to be initially applied
                                                     // to each header
     },
@@ -205,9 +214,19 @@ var defaultOptions =
                                                     // 'max' sets all databoxes to the same
                                                     // maximum height
         'draggable'             : true,             // true: databoxes can be dragged
-        'preventDragEvent'      : true,             // true: calls stopPropagation() and
-                                                    // preventDefault() for the click and
+        'touchdrag'             : true,             // true: databoxes can be dragged with
+                                                    // touch events
+        'snapping'              : true,             // true: databoxes will snap to center
+                                                    // if moved near to the center
+        'snappingDistance'      : 25,               // distance to snap databoxes
+        'centerAfterDragging'   : true,             // true: centers the current item when
+                                                    // mouse releases
+        'centerAfterTouchDrag'  : true,             // true: centers the current item when
+                                                    // touch event ends
+        'preventDragEvent'      : true,             // true: calls preventDefault() for the
+                                                    // click and
                                                     // move events while dragging
+        'preventTouchEvent'     : false,            // true: calls preventDefault()
         'style'                 : {}                // some styles to be initially applied
                                                     // to each databox
     },
@@ -222,4 +241,5 @@ var defaultOptions =
                                                     // animation
     }
 };
+
 ```
