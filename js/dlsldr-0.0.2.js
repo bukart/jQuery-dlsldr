@@ -86,17 +86,20 @@
                 'clickable'             : true,             // true: clicking on a header scrolls to
                                                             // the corresponding content
                 'draggable'             : true,             // true: headers can be dragged
-                'touchdrag'             : true,
-                'snapping'              : true,
-                'snappingDistance'      : 25,
-                'centerAfterDragging'   : true,
-                'centerAfterTouchDrag'  : true,
-                'preventClickEvent'     : true,             // true: calls stopPropagation() and
-                                                            // preventDefault() for the click event
-                'preventDragEvent'      : true,             // true: calls stopPropagation() and
-                                                            // preventDefault() for the click and
-                                                            // move events while dragging
-                'preventTouchEvent'     : false,
+                'touchdrag'             : true,             // true: headers can be dragged with
+                                                            // touch events
+                'snapping'              : true,             // true: headers will snap to center
+                                                            // if moved near to the center
+                'snappingDistance'      : 25,               // distance to snap headers
+                'centerAfterDragging'   : true,             // true: centers the current item when
+                                                            // mouse releases
+                'centerAfterTouchDrag'  : true,             // true: centers the current item when
+                                                            // touch event ends
+                'preventClickEvent'     : true,             // true: calls preventDefault() for the
+                                                            // click event
+                'preventDragEvent'      : true,             // true: calls preventDefault() for the
+                                                            // click and move events while dragging
+                'preventTouchEvent'     : false,            // true: calls preventDefault()
                 'style'                 : {}                // some styles to be initially applied
                                                             // to each header
             },
@@ -127,15 +130,19 @@
                                                             // 'max' sets all databoxes to the same
                                                             // maximum height
                 'draggable'             : true,             // true: databoxes can be dragged
-                'touchdrag'             : true,
-                'snapping'              : true,
-                'snappingDistance'      : 25,
-                'centerAfterDragging'   : true,
-                'centerAfterTouchDrag'  : true,
-                'preventDragEvent'      : true,             // true: calls stopPropagation() and
-                                                            // preventDefault() for the click and
+                'touchdrag'             : true,             // true: databoxes can be dragged with
+                                                            // touch events
+                'snapping'              : true,             // true: databoxes will snap to center
+                                                            // if moved near to the center
+                'snappingDistance'      : 25,               // distance to snap databoxes
+                'centerAfterDragging'   : true,             // true: centers the current item when
+                                                            // mouse releases
+                'centerAfterTouchDrag'  : true,             // true: centers the current item when
+                                                            // touch event ends
+                'preventDragEvent'      : true,             // true: calls preventDefault() for the
+                                                            // click and
                                                             // move events while dragging
-                'preventTouchEvent'     : false,
+                'preventTouchEvent'     : false,            // true: calls preventDefault()
                 'style'                 : {}                // some styles to be initially applied
                                                             // to each databox
             },
@@ -1280,9 +1287,7 @@
 
             if ( settings.headers.preventClickEvent )
             {
-                // e.stopPropagation();
                 e.preventDefault();
-                // return false;
             }
         }; // var _clickHeader = function( e )
 
@@ -1297,9 +1302,7 @@
 
             if ( settings.databoxes.preventDragEvent )
             {
-                // e.stopPropagation();
                 e.preventDefault();
-                // return false;
              }
         }; // var _clickDatabox = function( e )
 
@@ -1314,9 +1317,7 @@
 
             if ( settings.headers.preventDragEvent )
             {
-                // e.stopPropagation();
                 e.preventDefault();
-                // return false;
             }
         }; // var _startDragHeader = function( e )
 
@@ -1334,9 +1335,7 @@
 
             if ( settings.headers.preventTouchEvent )
             {
-                // e.stopPropagation();
                 e.preventDefault();
-                // return false;
             }
         }; // var _startTouchHeader = function( e )
 
@@ -1351,9 +1350,7 @@
 
             if ( settings.databoxes.preventDragEvent )
             {
-                // e.stopPropagation();
                 e.preventDefault();
-                // return false;
             }
         }; // var _startDragDatabox = function( e )
 
@@ -1371,9 +1368,7 @@
 
             if ( settings.databoxes.preventTouchEvent )
             {
-                // e.stopPropagation();
                 e.preventDefault();
-                // return false;
             }
         }; // var _startTouchDatabox = function( e )
 
@@ -1423,9 +1418,7 @@
 
             if ( preventDragEvent )
             {
-                // e.stopPropagation();
                 e.preventDefault();
-                // return false;
             }
 
         }; // var _documentMouseUp = function( e )
@@ -1476,9 +1469,7 @@
 
             if ( preventTouchEvent )
             {
-                // e.stopPropagation();
                 e.preventDefault();
-                // return false;
             }
 
         }; // var _documentTouchEnd = function( e )
@@ -1576,9 +1567,7 @@
 
             if ( preventDragEvent )
             {
-                // e.stopPropagation();
                 e.preventDefault();
-                // return false;
             }
 
         }; // var _documentMouseMove = function( e )
@@ -1659,16 +1648,7 @@
 
             if ( preventTouchEvent )
             {
-                //if ( 'function' == typeof document.selection.empty ) {
-                    //document.selection.empty();
-                //} else {
-                    window.getSelection().removeAllRanges();
-                //}
-
-
-                // e.stopPropagation();
                 e.preventDefault();
-                // return false;
             }
 
         }; // var _documentTouchMove = function( e )
