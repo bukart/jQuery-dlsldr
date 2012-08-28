@@ -80,17 +80,26 @@
                                                             // while using 'auto' the height for all
                                                             // headers is the height of the highest
                                                             // header
-                'gapSize'               : 0,                // the minimal gap between two clashing
+                'gapSize'               : 10,               // the minimal gap between two clashing
                                                             // headers
                                                             // allowed values: number >= 0
                 'clickable'             : true,             // true: clicking on a header scrolls to
                                                             // the corresponding content
                 'draggable'             : true,             // true: headers can be dragged
-                'preventClickEvent'     : true,             // true: calls stopPropagation() and
-                                                            // preventDefault() for the click event
-                'preventDragEvent'      : true,             // true: calls stopPropagation() and
-                                                            // preventDefault() for the click and
-                                                            // move events while dragging
+                'touchdrag'             : true,             // true: headers can be dragged with
+                                                            // touch events
+                'snapping'              : true,             // true: headers will snap to center
+                                                            // if moved near to the center
+                'snappingDistance'      : 25,               // distance to snap headers
+                'centerAfterDragging'   : true,             // true: centers the current item when
+                                                            // mouse releases
+                'centerAfterTouchDrag'  : true,             // true: centers the current item when
+                                                            // touch event ends
+                'preventClickEvent'     : true,             // true: calls preventDefault() for the
+                                                            // click event
+                'preventDragEvent'      : true,             // true: calls preventDefault() for the
+                                                            // click and move events while dragging
+                'preventTouchEvent'     : false,            // true: calls preventDefault()
                 'style'                 : {}                // some styles to be initially applied
                                                             // to each header
             },
@@ -121,9 +130,19 @@
                                                             // 'max' sets all databoxes to the same
                                                             // maximum height
                 'draggable'             : true,             // true: databoxes can be dragged
-                'preventDragEvent'      : true,             // true: calls stopPropagation() and
-                                                            // preventDefault() for the click and
+                'touchdrag'             : true,             // true: databoxes can be dragged with
+                                                            // touch events
+                'snapping'              : true,             // true: databoxes will snap to center
+                                                            // if moved near to the center
+                'snappingDistance'      : 25,               // distance to snap databoxes
+                'centerAfterDragging'   : true,             // true: centers the current item when
+                                                            // mouse releases
+                'centerAfterTouchDrag'  : true,             // true: centers the current item when
+                                                            // touch event ends
+                'preventDragEvent'      : true,             // true: calls preventDefault() for the
+                                                            // click and
                                                             // move events while dragging
+                'preventTouchEvent'     : false,            // true: calls preventDefault()
                 'style'                 : {}                // some styles to be initially applied
                                                             // to each databox
             },
@@ -214,7 +233,22 @@
                 'initialPos'            : 0,
                 'dragged'               : false
             },
+            'touchingHeader'        :
+            {
+                'active'                : false,
+                'startEvent'            : null,
+                'initialPos'            : 0,
+                'dragged'               : false
+            },
             'draggingDatabox'       :
+            {
+                'active'                : false,
+                'startEvent'            : null,
+                'initialPos'            : 0,
+                'dragged'               : false,
+                'maxDist'               : 0
+            },
+            'touchingDatabox'       :
             {
                 'active'                : false,
                 'startEvent'            : null,
@@ -1145,6 +1179,7 @@
             = function()
         {
             var bindDraggingHandler = false;
+            var bindTouchingHandler = false;
 
             if ( settings.headers.clickable )
             {
@@ -1162,6 +1197,15 @@
                 bindDraggingHandler = true;
             }
 
+            if ( settings.headers.draggable && settings.headers.touchdrag )
+            {
+                components.$headers
+                    .unbind( 'touchstart' + _NSPC_ )
+                    .bind( 'touchstart' + _NSPC_, _startTouchHeader );
+
+                bindDraggingHandler = true;
+            }
+
             if ( settings.databoxes.draggable )
             {
                 components.$databoxes
@@ -1171,9 +1215,19 @@
                     .unbind( 'click' + _NSPC_ )
                     .bind( 'click' + _NSPC_, _clickDataboxChild );
 
-                //$( 'a' ).bind( 'click', function(e) { e.preventDefault();return false;} );
-
                 bindDraggingHandler = true;
+            }
+
+            if ( settings.databoxes.draggable && settings.databoxes.touchdrag )
+            {
+                components.$databoxes
+                    .unbind( 'touchstart' + _NSPC_ )
+                    .bind( 'touchstart' + _NSPC_, _startTouchDatabox );
+                $( '*', components.$databoxes )
+                    .unbind( 'click' + _NSPC_ )
+                    .bind( 'click' + _NSPC_, _clickDataboxChild );
+
+                bindTouchingHandler = true;
             }
 
             if ( bindDraggingHandler )
@@ -1185,6 +1239,19 @@
                 $document
                     .unbind( 'mousemove' + _UNSPC_ )
                     .bind( 'mousemove' + _UNSPC_, _documentMouseMove );
+            }
+
+            if ( bindTouchingHandler )
+            {
+                var $document = $( document );
+                $document
+                    .unbind( 'touchend' + _UNSPC_ )
+                    .unbind( 'touchcancel' + _UNSPC_ )
+                    .bind( 'touchend' + _UNSPC_, _documentTouchEnd )
+                    .bind( 'touchcancel' + _UNSPC_, _documentTouchEnd );
+                $document
+                    .unbind( 'touchmove' + _UNSPC_ )
+                    .bind( 'touchmove' + _UNSPC_, _documentTouchMove );
             }
 
             components.$container
@@ -1220,9 +1287,7 @@
 
             if ( settings.headers.preventClickEvent )
             {
-                e.stopPropagation();
                 e.preventDefault();
-                return false;
             }
         }; // var _clickHeader = function( e )
 
@@ -1237,9 +1302,7 @@
 
             if ( settings.databoxes.preventDragEvent )
             {
-                e.stopPropagation();
                 e.preventDefault();
-                return false;
              }
         }; // var _clickDatabox = function( e )
 
@@ -1254,11 +1317,27 @@
 
             if ( settings.headers.preventDragEvent )
             {
-                e.stopPropagation();
                 e.preventDefault();
-                return false;
             }
         }; // var _startDragHeader = function( e )
+
+
+        var _startTouchHeader
+            = function( e )
+        {
+            e.screenX = e.originalEvent.touches[0].screenX;
+            e.screenY = e.originalEvent.touches[0].screenY;
+
+            status.touchingHeader.active = true;
+            status.touchingHeader.startEvent = e;
+            status.touchingHeader.initialPos = getPos();
+            status.touchingHeader.dragged = false;
+
+            if ( settings.headers.preventTouchEvent )
+            {
+                e.preventDefault();
+            }
+        }; // var _startTouchHeader = function( e )
 
 
         var _startDragDatabox
@@ -1271,11 +1350,27 @@
 
             if ( settings.databoxes.preventDragEvent )
             {
-                e.stopPropagation();
                 e.preventDefault();
-                return false;
             }
         }; // var _startDragDatabox = function( e )
+
+
+        var _startTouchDatabox
+            = function( e )
+        {
+            e.screenX = e.originalEvent.touches[0].screenX;
+            e.screenY = e.originalEvent.touches[0].screenY;
+
+            status.touchingDatabox.active = true;
+            status.touchingDatabox.startEvent = e;
+            status.touchingDatabox.initialPos = getPos();
+            status.touchingDatabox.dragged = false;
+
+            if ( settings.databoxes.preventTouchEvent )
+            {
+                e.preventDefault();
+            }
+        }; // var _startTouchDatabox = function( e )
 
 
         var _documentMouseUp
@@ -1290,7 +1385,17 @@
                 {
                     preventDragEvent = true;
                 }
+
+                if ( settings.headers.centerAfterDragging )
+                {
+                    var diff = getCurrentNum( true ) - getCurrentNum();
+                    if ( 0 != diff )
+                    {
+                        goTo( getCurrentNum(), true );
+                    }
+                }
             }
+
 
             if ( status.draggingDatabox.active )
             {
@@ -1299,21 +1404,86 @@
                 {
                     preventDragEvent = true;
                 }
+
+                if ( settings.databoxes.centerAfterDragging )
+                {
+                    var diff = getCurrentNum( true ) - getCurrentNum();
+                    if ( 0 != diff )
+                    {
+                        goTo( getCurrentNum(), true );
+                    }
+                }
+
             }
 
             if ( preventDragEvent )
             {
-                e.stopPropagation();
                 e.preventDefault();
-                return false;
             }
 
         }; // var _documentMouseUp = function( e )
 
 
+        var _documentTouchEnd
+            = function( e )
+        {
+            var preventTouchEvent = false;
+
+            if ( status.touchingHeader.active )
+            {
+                status.touchingHeader.active = false;
+                if ( settings.headers.preventTouchEvent )
+                {
+                    preventTouchEvent = true;
+                }
+
+                if ( settings.headers.centerAfterTouchDrag )
+                {
+                    var diff = getCurrentNum( true ) - getCurrentNum();
+                    if ( 0 != diff )
+                    {
+                        goTo( getCurrentNum(), true );
+                    }
+                }
+            }
+
+
+            if ( status.touchingDatabox.active )
+            {
+                status.touchingDatabox.active = false;
+                if ( settings.databoxes.preventTouchEvent )
+                {
+                    preventTouchEvent = true;
+                }
+
+                if ( settings.databoxes.centerAfterTouchDrag )
+                {
+                    var diff = getCurrentNum( true ) - getCurrentNum();
+                    if ( 0 != diff )
+                    {
+                        goTo( getCurrentNum(), true );
+                    }
+                }
+
+            }
+
+            if ( preventTouchEvent )
+            {
+                e.preventDefault();
+            }
+
+        }; // var _documentTouchEnd = function( e )
+
+
         var _documentMouseMove
             = function( e )
         {
+            if ( 'undefined' == typeof e.screenX )
+            {
+                e.screenX = e.originalEvent.touches[0].screenX;
+                e.screenY = e.originalEvent.touches[0].screenY;
+            }
+
             var preventDragEvent = false;
 
             if ( status.draggingHeader.active )
@@ -1328,6 +1498,17 @@
                     }
                     status.draggingHeader.dragged = true;
                     stop();
+                }
+
+                if ( settings.headers.snapping )
+                {
+                    var cw = _getContainerWidth();
+                    var cw2 = cw / 2;
+                    var snapShift = ( status.draggingHeader.initialPos + delta + cw2 ) % cw - cw2;
+                    if ( Math.abs( snapShift ) <= settings.headers.snappingDistance )
+                    {
+                        delta -= snapShift;
+                    }
                 }
 
                 setPos( status.draggingHeader.initialPos + delta );
@@ -1364,6 +1545,17 @@
                     status.draggingDatabox.active = false;
                 }
 
+                if ( settings.headers.snapping )
+                {
+                    var cw = _getContainerWidth();
+                    var cw2 = cw / 2;
+                    var snapShift = ( status.draggingDatabox.initialPos + delta + cw2 ) % cw - cw2;
+                    if ( Math.abs( snapShift ) <= settings.databoxes.snappingDistance )
+                    {
+                        delta -= snapShift;
+                    }
+                }
+
 
                 setPos( status.draggingDatabox.initialPos + delta );
 
@@ -1375,12 +1567,91 @@
 
             if ( preventDragEvent )
             {
-                e.stopPropagation();
                 e.preventDefault();
-                return false;
             }
 
         }; // var _documentMouseMove = function( e )
+
+
+        var _documentTouchMove
+            = function( e )
+        {
+            e.screenX = e.originalEvent.touches[0].screenX;
+            e.screenY = e.originalEvent.touches[0].screenY;
+
+            var preventTouchEvent = false;
+
+            if ( status.touchingHeader.active )
+            {
+                var delta = status.touchingHeader.startEvent.screenX - e.screenX;
+
+                if ( 0 != delta )
+                {
+                    status.touchingHeader.dragged = true;
+                    stop();
+                }
+
+                if ( settings.headers.snapping )
+                {
+                    var cw = _getContainerWidth();
+                    var cw2 = cw / 2;
+                    var snapShift = ( status.touchingHeader.initialPos + delta + cw2 ) % cw - cw2;
+                    if ( Math.abs( snapShift ) <= settings.headers.snappingDistance )
+                    {
+                        delta -= snapShift;
+                    }
+                }
+
+                setPos( status.touchingHeader.initialPos + delta );
+
+                preventTouchEvent = true;
+            }
+
+            if ( status.touchingDatabox.active )
+            {
+                var deltaV = status.touchingDatabox.startEvent.screenY - e.screenY;
+                var delta = status.touchingDatabox.startEvent.screenX - e.screenX;
+
+                if ( 0 != delta )
+                {
+                    status.touchingDatabox.dragged = true;
+                    status.touchingDatabox.maxDist = 0;
+                    stop();
+                }
+
+                status.touchingDatabox.maxDist = Math.max(
+                    Math.abs( delta ),
+                    status.touchingDatabox.maxDist
+                );
+
+                if ( 10 < Math.abs( deltaV ) && 10 > status.touchingDatabox.maxDist )
+                {
+                    status.touchingDatabox.active = false;
+                }
+
+                if ( settings.headers.snapping )
+                {
+                    var cw = _getContainerWidth();
+                    var cw2 = cw / 2;
+                    var snapShift = ( status.touchingDatabox.initialPos + delta + cw2 ) % cw - cw2;
+                    if ( Math.abs( snapShift ) <= settings.databoxes.snappingDistance )
+                    {
+                        delta -= snapShift;
+                    }
+                }
+
+
+                setPos( status.touchingDatabox.initialPos + delta );
+
+                preventTouchEvent = true;
+            }
+
+            if ( preventTouchEvent )
+            {
+                e.preventDefault();
+            }
+
+        }; // var _documentTouchMove = function( e )
 
         // << callbacks for events handler
         // -----------------------------------------------------------------------------------------
