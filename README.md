@@ -7,7 +7,7 @@ A simple slider for html definition lists (&lt;dl&gt;&hellip;&lt;/dl&gt;)
 
 ## Example
 
-Hey, just [visit the github page about this plugin](http://bukart.github.com/jQuery-dlsldr/), to see it in action.
+Hey, just [visit the github page about this plugin](http://bukfixart.github.com/jQuery-dlsldr/), to see it in action.
 
 ## Usage
 
